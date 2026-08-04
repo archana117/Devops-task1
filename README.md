@@ -1,186 +1,402 @@
-# EXPERIMENT – 1
+# Twitter Dataset Analysis using TF-IDF, K-Means Clustering, and t-SNE Visualization
 
-# Understanding DevOps: Principles, Practices, and DevOps Engineer Roles & Responsibilities
+## Project Overview
 
-## Aim
-To understand DevOps, its principles, practices, lifecycle, and the roles and responsibilities of a DevOps Engineer.
-
----
-
-## Introduction
-
-DevOps is a combination of **Development (Dev)** and **Operations (Ops)**. It is a software development methodology that promotes collaboration between software developers and IT operations teams. DevOps aims to automate and streamline the Software Development Life Cycle (SDLC), enabling organizations to deliver software quickly, reliably, and efficiently.
-
-DevOps encourages continuous integration, continuous delivery, automation, monitoring, and collaboration to improve software quality and reduce deployment time.
+This project performs text mining and visualization on a Twitter dataset. It preprocesses tweet text, converts it into numerical vectors using TF-IDF, groups similar tweets using K-Means clustering, and visualizes tweet clusters using t-SNE. In addition, the project generates several statistical visualizations to understand user activity, engagement, and tweet content.
 
 ---
 
-## Objectives
+# Objectives
 
-- Understand the concept of DevOps.
-- Learn the principles of DevOps.
-- Study the DevOps lifecycle.
-- Understand DevOps practices.
-- Learn the roles and responsibilities of a DevOps Engineer.
-
----
-
-## What is DevOps?
-
-DevOps is a culture, methodology, and set of practices that integrates software development and IT operations. It enables organizations to build, test, deploy, and monitor applications more efficiently by promoting automation and collaboration.
+- Clean and preprocess tweet text.
+- Convert textual data into TF-IDF feature vectors.
+- Cluster similar tweets using K-Means.
+- Reduce high-dimensional text features into 2D using t-SNE.
+- Visualize tweet clusters.
+- Analyze likes, retweets, user activity, and monthly tweet trends.
+- Generate a Word Cloud and identify the most frequent words.
 
 ---
 
-## DevOps Lifecycle
+# Technologies Used
 
-The DevOps lifecycle consists of the following stages:
-
-### 1. Plan
-Requirement gathering, planning, and project management.
-
-### 2. Develop
-Writing and maintaining application source code.
-
-### 3. Build
-Compiling source code and generating application packages.
-
-### 4. Test
-Performing automated and manual testing to ensure software quality.
-
-### 5. Release
-Preparing the application for deployment.
-
-### 6. Deploy
-Deploying applications into production environments.
-
-### 7. Operate
-Managing and maintaining the application after deployment.
-
-### 8. Monitor
-Monitoring application performance and collecting feedback for continuous improvement.
-
----
-
-## Principles of DevOps
-
-### Collaboration
-Encourages teamwork between development, testing, and operations teams.
-
-### Automation
-Automates repetitive tasks such as testing, deployment, and infrastructure provisioning.
-
-### Continuous Integration (CI)
-Developers frequently integrate code changes into a shared repository where automated builds and tests are performed.
-
-### Continuous Delivery (CD)
-Ensures software is always ready for deployment through automated release pipelines.
-
-### Continuous Monitoring
-Monitors application performance, logs, and infrastructure to detect issues early.
-
-### Continuous Feedback
-Collects feedback from users and monitoring tools to improve software quality.
-
----
-
-## DevOps Practices
-
-- Version Control
-- Continuous Integration
-- Continuous Delivery
-- Infrastructure as Code (IaC)
-- Configuration Management
-- Continuous Monitoring
-- Containerization
-- Microservices
-
----
-
-## Popular DevOps Tools
-
-| Category | Tools |
-|----------|----------------------------|
-| Version Control | Git, GitHub |
-| Build Tools | Maven, Gradle |
-| CI/CD | Jenkins, GitHub Actions |
-| Containers | Docker |
-| Orchestration | Kubernetes |
-| Infrastructure as Code | Terraform, Ansible |
-| Monitoring | Prometheus, Grafana |
-| Cloud Platforms | AWS, Azure, Google Cloud |
-
----
-
-## Role of a DevOps Engineer
-
-A DevOps Engineer bridges the gap between development and operations teams by automating software delivery processes, managing infrastructure, and ensuring reliable deployments.
-
----
-
-## Responsibilities of a DevOps Engineer
-
-- Manage source code repositories.
-- Build and maintain CI/CD pipelines.
-- Automate software deployment.
-- Monitor application and server performance.
-- Implement Infrastructure as Code.
-- Ensure system security.
-- Troubleshoot deployment issues.
-- Collaborate with development, testing, and operations teams.
-
----
-
-## Skills Required
-
-### Technical Skills
-
-- Linux
-- Git
-- GitHub
-- Docker
-- Kubernetes
-- Jenkins
 - Python
-- Bash Scripting
-- AWS / Azure / GCP
-- Networking
-
-### Soft Skills
-
-- Communication
-- Teamwork
-- Problem Solving
-- Analytical Thinking
-- Time Management
+- Pandas
+- NumPy
+- Matplotlib
+- Seaborn
+- Scikit-learn
+- WordCloud
+- Regular Expressions (re)
 
 ---
 
-## Advantages of DevOps
+# Required Libraries
 
-- Faster software delivery
-- Improved collaboration
-- Better software quality
-- Automated deployment
-- Faster bug fixing
-- Increased customer satisfaction
+Install all dependencies before running the project.
 
----
-
-## Challenges of DevOps
-
-- Initial setup cost
-- Learning curve
-- Tool integration complexity
-- Organizational culture change
+```bash
+pip install pandas numpy matplotlib seaborn scikit-learn wordcloud
+```
 
 ---
 
-## Result
+# Dataset
 
-Successfully understood the concepts, principles, practices, lifecycle, and responsibilities of DevOps.
+Input Dataset:
+
+```
+twitter_dataset.csv
+```
+
+Expected columns:
+
+- Text
+- Username
+- Likes
+- Retweets
+- Timestamp
 
 ---
 
-## Conclusion
+# Project Workflow
 
-DevOps is an essential software development methodology that improves collaboration, automation, and continuous software delivery. It enables organizations to develop, deploy, and maintain applications efficiently while ensuring high quality and reliability.
+## Step 1: Import Libraries
+
+Import all required Python libraries for:
+
+- Data manipulation
+- Visualization
+- Machine Learning
+- Text Processing
+
+---
+
+## Step 2: Load Dataset
+
+```python
+df = pd.read_csv("twitter_dataset.csv")
+```
+
+The dataset is loaded into a Pandas DataFrame.
+
+---
+
+## Step 3: Text Preprocessing
+
+Each tweet is cleaned by:
+
+- Converting to lowercase
+- Removing URLs
+- Removing usernames (@username)
+- Removing hashtags (#)
+- Removing special characters
+- Removing numbers
+- Keeping only alphabetic words
+
+Example:
+
+Before:
+
+```
+Love AI!! Visit https://abc.com #AI @OpenAI
+```
+
+After:
+
+```
+love ai visit ai
+```
+
+The cleaned tweets are stored in:
+
+```
+clean_text
+```
+
+---
+
+## Step 4: TF-IDF Vectorization
+
+Tweets are converted into numerical vectors using:
+
+```
+TfidfVectorizer(max_features=2000)
+```
+
+Output:
+
+```
+Sparse Matrix
+```
+
+Shape:
+
+```
+(Number of Tweets × 2000 Features)
+```
+
+---
+
+## Step 5: K-Means Clustering
+
+Tweets are grouped into
+
+```
+5 clusters
+```
+
+using
+
+```
+KMeans
+```
+
+Each tweet receives a cluster label.
+
+New column:
+
+```
+cluster
+```
+
+---
+
+## Step 6: Sampling
+
+Since t-SNE is computationally expensive,
+
+A maximum of
+
+```
+2000 tweets
+```
+
+are randomly selected.
+
+---
+
+## Step 7: t-SNE Dimensionality Reduction
+
+The TF-IDF vectors are reduced from thousands of dimensions to
+
+```
+2 Dimensions
+```
+
+using
+
+```
+TSNE
+```
+
+Parameters:
+
+- n_components = 2
+- perplexity = 30
+- learning_rate = 200
+- random_state = 42
+
+Output:
+
+```
+x
+y
+```
+
+coordinates for each sampled tweet.
+
+---
+
+# Visualizations
+
+The project generates the following visualizations.
+
+---
+
+## 1. t-SNE Scatter Plot
+
+Displays tweet clusters in 2D space.
+
+Color indicates cluster membership.
+
+---
+
+## 2. Cluster Visualization with Usernames
+
+Displays:
+
+- Tweet clusters
+- Username labels
+- Cluster separation
+
+---
+
+## 3. Likes Distribution
+
+Histogram showing:
+
+- Tweet likes
+- Frequency distribution
+- KDE curve
+
+---
+
+## 4. Retweet Distribution
+
+Histogram showing retweet frequency.
+
+---
+
+## 5. Top Active Users
+
+Bar chart showing
+
+Top 10 users with the highest number of tweets.
+
+---
+
+## 6. Cluster Distribution
+
+Pie chart showing percentage of tweets in each cluster.
+
+---
+
+## 7. Word Cloud
+
+Visual representation of the most frequent words appearing in tweets.
+
+---
+
+## 8. Top 15 Frequent Words
+
+Bar chart showing the fifteen most common words after preprocessing.
+
+---
+
+## 9. Monthly Tweet Activity
+
+Line chart showing the number of tweets posted each month.
+
+Timestamp is converted into datetime format before analysis.
+
+---
+
+## 10. Likes by Cluster
+
+Box Plot comparing likes received by tweets belonging to different clusters.
+
+---
+
+# Output Files
+
+Generated Output:
+
+```
+twitter_tsne_output.csv
+```
+
+Contains:
+
+- Original tweet
+- Cleaned tweet
+- Cluster label
+- t-SNE X Coordinate
+- t-SNE Y Coordinate
+
+---
+
+# Machine Learning Techniques Used
+
+## TF-IDF
+
+Converts textual tweets into numerical vectors by considering the importance of words.
+
+---
+
+## K-Means Clustering
+
+Groups similar tweets into clusters without using labels.
+
+Number of clusters:
+
+```
+5
+```
+
+---
+
+## t-SNE
+
+Reduces high-dimensional TF-IDF vectors into two dimensions while preserving local similarities for visualization.
+
+---
+
+# Project Structure
+
+```
+Twitter-TSNE-Analysis/
+
+│
+├── twitter_dataset.csv
+├── TSNE.ipynb
+├── twitter_tsne_output.csv
+├── README.md
+```
+
+---
+
+# Expected Output
+
+The project produces:
+
+- Cleaned tweet dataset
+- TF-IDF feature matrix
+- K-Means cluster labels
+- 2D t-SNE visualization
+- User cluster visualization
+- Likes distribution
+- Retweet distribution
+- Top active users chart
+- Cluster distribution pie chart
+- Word cloud
+- Top frequent words chart
+- Monthly tweet activity graph
+- Likes by cluster box plot
+- Output CSV containing cluster assignments and t-SNE coordinates
+
+---
+
+# Applications
+
+This project can be used for:
+
+- Social Media Analytics
+- Trend Analysis
+- Community Detection
+- User Behavior Analysis
+- Topic Discovery
+- Marketing Analytics
+- Public Opinion Analysis
+- Twitter Data Mining
+- Data Visualization
+- Machine Learning Education
+
+---
+
+# Future Improvements
+
+- Sentiment Analysis
+- BERT or SentenceTransformer embeddings
+- UMAP visualization
+- Interactive Plotly dashboards
+- Automatic cluster labeling
+- Topic modeling using LDA
+- Real-time Twitter API integration
+- Deep learning-based tweet embeddings
+
+---
+
+# Author
+
+Developed as a Machine Learning project demonstrating text preprocessing, unsupervised learning, dimensionality reduction, and data visualization techniques using Python.
